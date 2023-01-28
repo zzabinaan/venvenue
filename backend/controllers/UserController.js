@@ -49,10 +49,68 @@ export const createUser = async (req, res) => {
       role,
     };
     return responseSuccessWithData(201, "Successfully Registered", data, res);
-    // return responseSuccess(200, "Successfully Registered", res);
   } catch (error) {
     console.log(error);
   }
 };
-export const updateUser = (req, res) => {};
-export const deleteUser = (req, res) => {};
+export const updateUser = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      uuid: req.params.id,
+    },
+  });
+  if (!user) return responseFailed(404, "User Not Found", res);
+  const { username, email, password, confirmPassword, role } = req.body;
+  let hashPassword;
+  if (password === "" || password === null) {
+    hashPassword = user.password;
+  } else {
+    hashPassword = await argon2.hash(password);
+  }
+  if (password !== confirmPassword)
+    return responseFailed(400, "Password and Confirm Password Not Match", res);
+
+  try {
+    await User.update(
+      {
+        username: username,
+        email: email,
+        password: hashPassword,
+        role: role,
+      },
+      {
+        where: {
+          id: user.id,
+        },
+      }
+    );
+    const data = {
+      username,
+      email,
+      role,
+    };
+    return responseSuccessWithData(201, "User Updated", data, res);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  const user = await User.findOne({
+    where: {
+      uuid: req.params.id,
+    },
+  });
+  if (!user) return responseFailed(404, "User Not Found", res);
+
+  try {
+    await User.destroy({
+      where: {
+        id: user.id,
+      },
+    });
+    return responseSuccess(200, "User Deleted", res);
+  } catch (error) {
+    console.log(error);
+  }
+};

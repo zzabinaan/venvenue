@@ -17,6 +17,7 @@ import TypeVenueRoutes from "./routes/TypeVenueRoute.js";
 import UserRoutes from "./routes/UserRoute.js";
 import VendorRoutes from "./routes/VendorRoute.js";
 import VenueRoutes from "./routes/VenueRoute.js";
+import AuthRoute from "./routes/AuthRoute.js";
 
 dotenv.config();
 
@@ -63,6 +64,8 @@ app.use(TypeVenueRoutes);
 app.use(AmenityVenueRoutes);
 
 app.use(OrderRoutes);
+
+app.use(AuthRoute);
 
 app.listen(process.env.APP_PORT, () => {
   console.log("server running...");
