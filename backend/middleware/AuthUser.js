@@ -34,3 +34,18 @@ export const adminOnly = async (req, res, next) => {
   }
   next();
 };
+
+export const vendorOnly = async (req, res, next) => {
+  const user = await User.findOne({
+    where: {
+      uuid: req.session.userId,
+    },
+  });
+  if (!user) {
+    return responseFailed(404, "User Not Found", res);
+  }
+  if (user.role !== "vendor") {
+    return responseFailed(403, "Forbidden Access", res);
+  }
+  next();
+};

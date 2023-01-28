@@ -11,7 +11,6 @@ const Types = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        lane: [3, 100],
       },
     },
   },

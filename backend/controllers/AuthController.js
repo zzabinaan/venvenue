@@ -36,7 +36,6 @@ export const me = async (req, res) => {
     return responseFailed(401, "You Need to Login First", res);
   }
   const user = await User.findOne({
-    attributes: ["uuid", "username", "email", "role"],
     where: {
       uuid: req.session.userId,
     },

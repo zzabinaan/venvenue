@@ -12,7 +12,6 @@ const Vendors = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        lane: [3, 250],
       },
     },
     address: {

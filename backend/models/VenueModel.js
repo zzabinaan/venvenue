@@ -22,7 +22,6 @@ const Venues = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        lane: [3, 250],
       },
     },
     description: {
@@ -37,7 +36,6 @@ const Venues = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        lane: [3, 500],
       },
     },
     capacity: {
@@ -50,29 +48,7 @@ const Venues = db.define(
     price: {
       type: DataTypes.INTEGER,
     },
-    // rental_types: {
-    //   type: DataTypes.ENUM({
-    //     values: [
-    //       "per hour",
-    //       "per day",
-    //       "min spend",
-    //       "per guest",
-    //       "price on asking",
-    //     ],
-    //   }),
-    //   defaultValue: "per hour",
-    //   allowNull: false,
-    //   validate: {
-    //     notEmpty: true,
-    //   },
-    // },
-    // status: {
-    //   type: DataTypes.ENUM({
-    //     velues: ["pending", "uploaded"],
-    //   }),
-    //   defaultValue: "pending",
-    // },
-
+   
     rental_types: {
       type: DataTypes.ENUM({
         values: [

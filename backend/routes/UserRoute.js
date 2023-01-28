@@ -18,7 +18,7 @@ router.patch("/users/:id", verifyUser, updateUser);
 router.delete("/users/:id", verifyUser, adminOnly, deleteUser);
 
 router.post("/register", createUser);
+router.post("/registerVendor", createVendor);
 router.post("/registerAdmin", verifyUser, adminOnly, createAdmin);
-router.post("/registerVendor", verifyUser, adminOnly, createVendor);
 
 export default router;

@@ -12,7 +12,6 @@ const Finders = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        lane: [3, 250],
       },
     },
     date_of_birth: {
