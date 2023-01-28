@@ -3,6 +3,7 @@ import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
 import db from "./config/database.js";
+import sequelizeStore from "connect-session-sequelize";
 
 import AmenityRoutes from "./routes/AmenityRoute.js";
 import AmenityVenueRoutes from "./routes/AmenityVenueRoute.js";
@@ -23,16 +24,22 @@ dotenv.config();
 
 const app = express();
 
-(async () => {
-  // await db.sync();
-  // await Finders.sync({ alter: true });
-})();
+const sessionStore = sequelizeStore(session.Store);
+const store = new sessionStore({
+  db: db,
+});
+
+// (async () => {
+//   // await db.sync();
+//   // await Finders.sync({ alter: true });
+// })();
 
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: store,
     cookie: {
       secure: "auto",
     },
@@ -66,6 +73,8 @@ app.use(AmenityVenueRoutes);
 app.use(OrderRoutes);
 
 app.use(AuthRoute);
+
+// store.sync(); --make sessiontable
 
 app.listen(process.env.APP_PORT, () => {
   console.log("server running...");
