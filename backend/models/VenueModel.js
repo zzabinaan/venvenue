@@ -48,7 +48,7 @@ const Venues = db.define(
     price: {
       type: DataTypes.INTEGER,
     },
-   
+
     rental_types: {
       type: DataTypes.ENUM({
         values: [
@@ -60,6 +60,10 @@ const Venues = db.define(
         ],
       }),
       defaultValue: "per hour",
+    },
+    
+    cover_picture: {
+      type: DataTypes.STRING,
     },
 
     status: {

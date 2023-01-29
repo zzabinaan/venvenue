@@ -1,9 +1,11 @@
 import express from "express";
+import FileUpload from "express-FileUpload";
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
 import db from "./config/database.js";
 import sequelizeStore from "connect-session-sequelize";
+import bodyParser from "body-parser";
 
 import AmenityRoutes from "./routes/AmenityRoute.js";
 import AmenityVenueRoutes from "./routes/AmenityVenueRoute.js";
@@ -19,20 +21,29 @@ import UserRoutes from "./routes/UserRoute.js";
 import VendorRoutes from "./routes/VendorRoute.js";
 import VenueRoutes from "./routes/VenueRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
+import Venues from "./models/VenueModel.js";
+import multer from "multer";
+const upload = multer();
 
 dotenv.config();
 
 const app = express();
-
 const sessionStore = sequelizeStore(session.Store);
 const store = new sessionStore({
   db: db,
 });
 
 // (async () => {
-//   // await db.sync();
-//   // await Finders.sync({ alter: true });
+//   await db.sync({ alter: true });
+//   // await Venues.sync();
 // })();
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+
+// // use from-data with file-upload
+// app.use(upload.array());
+app.use(FileUpload());
+app.use(express.static("public"));
 
 app.use(
   session({
