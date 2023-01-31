@@ -61,11 +61,12 @@ const Venues = db.define(
       }),
       defaultValue: "per hour",
     },
-    
-    cover_picture: {
+    cover: {
       type: DataTypes.STRING,
     },
-
+    cover_url: {
+      type: DataTypes.STRING,
+    },
     status: {
       type: DataTypes.ENUM({
         values: ["pending", "uploaded"],

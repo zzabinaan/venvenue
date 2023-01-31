@@ -22,8 +22,7 @@ import VendorRoutes from "./routes/VendorRoute.js";
 import VenueRoutes from "./routes/VenueRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import Venues from "./models/VenueModel.js";
-import multer from "multer";
-const upload = multer();
+
 
 dotenv.config();
 
@@ -37,11 +36,7 @@ const store = new sessionStore({
 //   await db.sync({ alter: true });
 //   // await Venues.sync();
 // })();
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
 
-// // use from-data with file-upload
-// app.use(upload.array());
 app.use(FileUpload());
 app.use(express.static("public"));
 

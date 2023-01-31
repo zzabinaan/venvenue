@@ -113,23 +113,25 @@ export const createVenue = async (req, res) => {
   const vendorId = vendor.id;
 
   if (req.file === null) {
-    return res.json("file need tobe uploaded");
+    return responseFailed(400, "You have upload cover for your venue", res);
   }
-  const file = req.files.cover_picture;
+
+  const file = req.files.cover;
   const fileSize = file.data.length;
   const ext = path.extname(file.name);
-  const fileName = file.md5 + ext;
-
-  const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+  const fileName = name + "-cover-" + file.md5 + ext;
+  const cover_url = `${req.protocol}://${req.get(
+    "host"
+  )}/images/cover-venue/${fileName}`;
   const allowedType = [".png", ".jpg", ".jpeg"];
 
   if (!allowedType.includes(ext.toLowerCase()))
-    return res.status(422).json({ msg: "Invalid Images" });
+    return responseFailed(422, "Invalid Image Upload", res);
   if (fileSize > 5000000)
-    return res.status(422).json({ msg: "Image must be less than 5 MB" });
+    return responseFailed(422, "Image must be less than 5 MB", res);
 
-  file.mv(`./public/images/${fileName}`, async (err) => {
-    if (err) return res.status(500).json({ msg: err.message });
+  file.mv(`./public/images/cover-venue/${fileName}`, async (err) => {
+    if (err) return responseFailed(500, err.message, res);
 
     try {
       const data = await Venues.create({
@@ -140,8 +142,8 @@ export const createVenue = async (req, res) => {
         price: price,
         rental_types: rental_types,
         status: status,
-        cover_picture: fileName,
-        url: url,
+        cover: fileName,
+        cover_url: cover_url,
         categoryId: categoryId,
         locatonId: locatonId,
         vendorId: vendorId,
@@ -160,6 +162,7 @@ export const createVenue = async (req, res) => {
 };
 
 export const updateVenue = async (req, res) => {
+  // get id loged-in user from session.uuid
   const user = await Users.findOne({
     where: {
       uuid: req.session.userId,
@@ -169,6 +172,7 @@ export const updateVenue = async (req, res) => {
     return responseFailed(404, "User Not Found", res);
   }
 
+  // find id vendor by id user
   const vendor = await Vendors.findOne({
     where: {
       userId: user.id,
@@ -178,12 +182,15 @@ export const updateVenue = async (req, res) => {
     return responseFailed(404, "vendor Not Found", res);
   }
 
+  // find venue by vendorId
   const venue = await Venues.findOne({
     where: {
       uuid: req.params.id,
     },
   });
-  if (!venue) return responseFailed(404, "Venue Not Found");
+  if (!venue) return responseFailed(404, "Venue Not Found", status);
+
+  // comparing vendorId with vendor.id
 
   if (vendor.id !== venue.vendorId)
     return responseFailed(
@@ -204,6 +211,33 @@ export const updateVenue = async (req, res) => {
     locationId,
   } = req.body;
   const vendorId = venue.vendorId;
+
+  let fileName = "";
+  if (req.files === null) {
+    fileName = venue.cover;
+  } else {
+    const file = req.files.cover;
+    const fileSize = file.data.length;
+    const ext = path.extname(file.name);
+    fileName = name + "-cover-" + file.md5 + ext;
+    const allowedType = [".png", ".jpg", ".jpeg"];
+
+    if (!allowedType.includes(ext.toLowerCase()))
+      return responseFailed(422, "Invalid Image Upload", res);
+    if (fileSize > 5000000)
+      return responseFailed(422, "Image must be less than 5 MB", res);
+
+    const filepath = `./public/images/cover-venue/${venue.cover}`;
+    fs.unlinkSync(filepath);
+
+    file.mv(`./public/images/cover-venue/${fileName}`, async (err) => {
+      if (err) return responseFailed(500, err.message, res);
+    });
+  }
+  const cover_url = `${req.protocol}://${req.get(
+    "host"
+  )}/images/cover-venue/${fileName}`;
+  const cover = fileName;
   try {
     await Venues.update(
       {
@@ -213,6 +247,8 @@ export const updateVenue = async (req, res) => {
         capacity: capacity,
         price: price,
         rental_types: rental_types,
+        cover: cover,
+        cover_url: cover_url,
         status: status,
         categoryId: categoryId,
         locationId: locationId,
@@ -229,6 +265,8 @@ export const updateVenue = async (req, res) => {
       capacity,
       price,
       rental_types,
+      cover,
+      cover_url,
       status,
       categoryId,
       locationId,
@@ -264,7 +302,7 @@ export const deleteVenue = async (req, res) => {
       uuid: req.params.id,
     },
   });
-  if (!venue) return responseFailed(404, "Venue Not Found");
+  if (!venue) return responseFailed(404, "Venue Not Found", res);
 
   if (vendor.id !== venue.vendorId)
     return responseFailed(
@@ -274,6 +312,8 @@ export const deleteVenue = async (req, res) => {
     );
 
   try {
+    const filepath = `./public/images/cover-venue/${venue.cover}`;
+    fs.unlinkSync(filepath);
     await Venues.destroy({
       where: {
         id: venue.id,
