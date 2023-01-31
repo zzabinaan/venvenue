@@ -16,11 +16,6 @@ const Vendors = db.define(
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        lane: [3, 500],
-      },
     },
     phone_number: {
       type: DataTypes.STRING,

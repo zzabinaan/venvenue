@@ -69,7 +69,7 @@ export const getVenueById = async (req, res) => {
         },
       ],
       where: {
-        uuid: req.params.id,
+        id: req.params.id,
       },
     });
     if (!data) return responseFailed(404, "Venue Not Found", res);
@@ -80,18 +80,9 @@ export const getVenueById = async (req, res) => {
 };
 
 export const createVenue = async (req, res) => {
-  const user = await Users.findOne({
-    where: {
-      uuid: req.session.userId,
-    },
-  });
-  if (!user) {
-    return responseFailed(404, "User Not Found", res);
-  }
-
   const vendor = await Vendors.findOne({
     where: {
-      userId: user.id,
+      userId: req.session.userId,
     },
   });
   if (!vendor) {
@@ -162,36 +153,24 @@ export const createVenue = async (req, res) => {
 };
 
 export const updateVenue = async (req, res) => {
-  // get id loged-in user from session.uuid
-  const user = await Users.findOne({
-    where: {
-      uuid: req.session.userId,
-    },
-  });
-  if (!user) {
-    return responseFailed(404, "User Not Found", res);
-  }
-
   // find id vendor by id user
   const vendor = await Vendors.findOne({
     where: {
-      userId: user.id,
+      userId: req.session.userId,
     },
   });
   if (!vendor) {
     return responseFailed(404, "vendor Not Found", res);
   }
 
-  // find venue by vendorId
   const venue = await Venues.findOne({
     where: {
-      uuid: req.params.id,
+     id: req.params.id,
     },
   });
-  if (!venue) return responseFailed(404, "Venue Not Found", status);
+  if (!venue) return responseFailed(404, "Venue Not Found", res);
 
   // comparing vendorId with vendor.id
-
   if (vendor.id !== venue.vendorId)
     return responseFailed(
       403,
@@ -258,20 +237,27 @@ export const updateVenue = async (req, res) => {
       }
     );
 
-    const data = {
-      name,
-      description,
-      address,
-      capacity,
-      price,
-      rental_types,
-      cover,
-      cover_url,
-      status,
-      categoryId,
-      locationId,
-      vendorId,
-    };
+    const data = await Venues.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!venue) return responseFailed(404, "Venue Not Found", status);
+
+    // const data = {
+    //   name,
+    //   description,
+    //   address,
+    //   capacity,
+    //   price,
+    //   rental_types,
+    //   cover,
+    //   cover_url,
+    //   status,
+    //   categoryId,
+    //   locationId,
+    //   vendorId,
+    // };
     return responseSuccessWithData(200, "Venue Updated", data, res);
   } catch (error) {
     console.log(error);
@@ -281,7 +267,7 @@ export const updateVenue = async (req, res) => {
 export const deleteVenue = async (req, res) => {
   const user = await Users.findOne({
     where: {
-      uuid: req.session.userId,
+      id: req.session.userId,
     },
   });
   if (!user) {
@@ -299,7 +285,7 @@ export const deleteVenue = async (req, res) => {
 
   const venue = await Venues.findOne({
     where: {
-      uuid: req.params.id,
+      id: req.params.id,
     },
   });
   if (!venue) return responseFailed(404, "Venue Not Found", res);

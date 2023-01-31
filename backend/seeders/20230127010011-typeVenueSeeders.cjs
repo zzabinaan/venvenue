@@ -13,12 +13,14 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          event_types: "Weddings",
+          typeId: 2,
+          venueId: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          event_types: "Conference",
+          typeId: 1,
+          venueId: 2,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

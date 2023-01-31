@@ -9,17 +9,9 @@ const Finders = db.define(
   {
     full_name: {
       type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     date_of_birth: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
     },
     phone_number: {
       type: DataTypes.STRING,

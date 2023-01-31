@@ -7,7 +7,6 @@ module.exports = {
       "users",
       [
         {
-          uuid: "jefuejrgueughj",
           username: "zzabinaan",
           email: "zabinaan@gmail.com",
           password: "12345",
@@ -16,7 +15,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          uuid: "jefuejrgueseyrwrughj",
           username: "tiantian",
           email: "tiantian@gmail.com",
           password: "12345",
@@ -25,7 +23,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          uuid: "jefuejrgueseyrwrughj",
           username: "gardenAdel",
           email: "gardenAdel@gmail.com",
           password: "12345",
@@ -34,7 +31,6 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          uuid: "jefuejrtwgueseyrwrughj",
           username: "auditoriumSurabaya",
           email: "auditoriumSurabaya@gmail.com",
           password: "12345",

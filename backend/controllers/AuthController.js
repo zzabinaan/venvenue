@@ -16,13 +16,13 @@ export const login = async (req, res) => {
   const match = await argon2.verify(user.password, req.body.password);
   if (!match) return responseFailed(400, "Wrong Password", res);
 
-  req.session.userId = user.uuid;
-  const uuid = user.uuid;
+  req.session.userId = user.id;
+  const id = user.id;
   const username = user.username;
   const email = user.email;
   const role = user.role;
   const data = {
-    uuid,
+    id,
     username,
     email,
     role,
@@ -37,7 +37,7 @@ export const me = async (req, res) => {
   }
   const user = await User.findOne({
     where: {
-      uuid: req.session.userId,
+      id: req.session.userId,
     },
   });
   if (!user) {

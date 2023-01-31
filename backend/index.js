@@ -23,7 +23,6 @@ import VenueRoutes from "./routes/VenueRoute.js";
 import AuthRoute from "./routes/AuthRoute.js";
 import Venues from "./models/VenueModel.js";
 
-
 dotenv.config();
 
 const app = express();
@@ -80,7 +79,8 @@ app.use(OrderRoutes);
 
 app.use(AuthRoute);
 
-// store.sync(); --make sessiontable
+// store.sync();
+// --make sessiontable
 
 app.listen(process.env.APP_PORT, () => {
   console.log("server running...");

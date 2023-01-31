@@ -7,7 +7,7 @@ export const verifyUser = async (req, res, next) => {
   }
   const user = await User.findOne({
     where: {
-      uuid: req.session.userId,
+      id: req.session.userId,
     },
   });
   if (!user) {
@@ -23,7 +23,7 @@ export const verifyUser = async (req, res, next) => {
 export const adminOnly = async (req, res, next) => {
   const user = await User.findOne({
     where: {
-      uuid: req.session.userId,
+      id: req.session.userId,
     },
   });
   if (!user) {
@@ -38,7 +38,7 @@ export const adminOnly = async (req, res, next) => {
 export const vendorOnly = async (req, res, next) => {
   const user = await User.findOne({
     where: {
-      uuid: req.session.userId,
+      id: req.session.userId,
     },
   });
   if (!user) {

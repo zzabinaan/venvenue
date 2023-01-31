@@ -9,14 +9,6 @@ const { DataTypes } = Sequelize;
 const Venues = db.define(
   "venues",
   {
-    uuid: {
-      type: DataTypes.STRING,
-      defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
