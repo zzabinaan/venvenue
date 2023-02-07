@@ -33,7 +33,7 @@ export const getUserById = async (req, res) => {
   }
 };
 
-export const createUser = async (req, res) => {
+export const createUser = async (req, res, next) => {
   const { username, email, password, confirmPassword } = req.body;
   const role = "finder";
   if (password !== confirmPassword)
@@ -46,13 +46,14 @@ export const createUser = async (req, res) => {
       password: hashPassword,
       role: role,
     });
-    return responseSuccessWithData(201, "Successfully Registered", data, res);
+    req.data = data;
+    next();
   } catch (error) {
     console.log(error);
   }
 };
 
-export const createVendor = async (req, res) => {
+export const createUserVendor = async (req, res, next) => {
   const { username, email, password, confirmPassword } = req.body;
   const role = "vendor";
   if (password !== confirmPassword)
@@ -65,7 +66,9 @@ export const createVendor = async (req, res) => {
       password: hashPassword,
       role: role,
     });
-    return responseSuccessWithData(201, "Successfully Registered", data, res);
+    // return responseSuccessWithData(201, "Successfully Registered", data, res);
+    req.data = data;
+    next();
   } catch (error) {
     console.log(error);
   }

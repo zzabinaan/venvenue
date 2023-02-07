@@ -132,3 +132,6 @@ dist
 #config
 config.json
 database.js
+
+#storage dir
+cover-venue/
